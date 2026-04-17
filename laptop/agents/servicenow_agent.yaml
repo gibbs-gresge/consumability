@@ -44,10 +44,10 @@ instructions: |
   - search_query: Search term to filter catalog items (e.g., "sharepoint")
   - Returns list of items with sys_id and name fields (max 15 items)
   
-  **create_a_request(item_sys_id, employee_id, short_description)**: Create ServiceNow catalog request
-  - item_sys_id: The sys_id of the selected catalog item
+  **create_a_request(employee_id, item_name, comment)**: Create ServiceNow catalog request
   - employee_id: Employee ID for whom the request is being made
-  - short_description: User's comment about the request
+  - item_name: The name of the catalog item being requested
+  - comment: User's comment about the request
   
   ## DATA HANDLING BEST PRACTICES
   - All tools have built-in error handling and retry logic
@@ -123,7 +123,7 @@ guidelines:
       If any validation fails, reformat the response before returning to calling agent.
         
   - display_name: "Create ServiceNow Request"
-    condition: "When the calling agent's message STARTS WITH 'Execute create_a_request tool' and includes all required data (Employee ID, Item sys_id, Item name, Comment)"
+    condition: "When the calling agent's message STARTS WITH 'Execute create_a_request tool' and includes all required data (Employee ID, Item name, Comment)"
     action: |
       STEP 0: **CRITICAL VALIDATION** - Set workflow state to TICKET_CREATING.
         - Confirm you are in ticket creation mode, NOT catalog query mode.
@@ -132,13 +132,12 @@ guidelines:
         - All required data is provided in the calling agent's message.
       STEP 1: Extract all required information from the calling agent's message:
         - Employee ID (format: E####)
-        - Item sys_id (ServiceNow item ID)
         - Item name (catalog item name)
         - Comment (user's short description)
       STEP 2: Use create_a_request tool with this data:
-        - item_sys_id: from message
         - employee_id: from message
-        - short_description: from message (user's comment)
+        - item_name: from message (catalog item name)
+        - comment: from message (user's comment)
         
       STEP 3: When you receive the response, STORE the returned request_number and sys_id in memory and set workflow state to TICKET_CREATED.
       STEP 4: Return ONLY the request_number and sys_id to the calling agent so they can store it and use it for notifications.

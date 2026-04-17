@@ -23,16 +23,19 @@ SERVICENOW_APP_ID = 'test_token'
 )
 def create_a_request(
     employee_id: str,
-    short_description: str
+    item_name: str,
+    comment: str
 ) -> Dict[str, Any]:
     """
     Create a ServiceNow catalog request.
     
     This tool creates a request in ServiceNow on behalf of an employee.
+    The short_description will be formatted as "Name: [item_name]. Comment: [comment]"
     
     Args:
         employee_id (str): The employee ID for whom the request is being made
-        short_description (str): A short description/comment about the request
+        item_name (str): The name of the catalog item being requested
+        comment (str): User's comment about the request
     
     Returns:
         Dict[str, Any]: Dictionary containing:
@@ -43,7 +46,8 @@ def create_a_request(
     Example:
         >>> result = create_a_request(
         ...     employee_id="E1001",
-        ...     short_description="Need SharePoint access for new project"
+        ...     item_name="Grant SharePoint Access",
+        ...     comment="Need SharePoint access for new project"
         ... )
         >>> print(result['request_number'])
         REQ0010153
@@ -56,6 +60,9 @@ def create_a_request(
         
         # Construct the API endpoint
         endpoint = f"{base_url}/api/now/table/sc_request"
+        
+        # Format short_description as "Name: [item_name]. Comment: [comment]"
+        short_description = f"Name: {item_name}. Comment: {comment}"
         
         # Build request body
         request_body = {
