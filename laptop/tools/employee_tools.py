@@ -13,10 +13,10 @@ logger = logging.getLogger(__name__)
 EMPLOYEES = [
     {
         "employeeId": "E1001",
-        "name": "Kai Duty",
+        "name": "Tom Brady",
         "title": "Director of Data Engineering",
         "organization": "Enterprise Data Platform",
-        "email": "Kai.Duty@ibm.com",
+        "email": "tom.brady@pnc.com",
         "startDate": "2016-04-18",
         "manager": {
             "name": "Sandra Lopez",
@@ -46,9 +46,9 @@ EMPLOYEES = [
         "email": "maya.chen@pnc.com",
         "startDate": "2019-07-22",
         "manager": {
-            "name": "Kai Duty",
+            "name": "Tom Brady",
             "employeeId": "E1001",
-            "email": "Kai.Duty@ibm.com"
+            "email": "tom.brady@pnc.com"
         },
         "direct_reports": []
     },
@@ -60,9 +60,9 @@ EMPLOYEES = [
         "email": "liam.patel@pnc.com",
         "startDate": "2021-02-15",
         "manager": {
-            "name": "Kai Duty",
+            "name": "Tom Brady",
             "employeeId": "E1001",
-            "email": "Kai.Duty@ibm.com"
+            "email": "tom.brady@pnc.com"
         },
         "direct_reports": []
     },
@@ -74,9 +74,9 @@ EMPLOYEES = [
         "email": "noah.brooks@pnc.com",
         "startDate": "2022-10-03",
         "manager": {
-            "name": "Kai Duty",
+            "name": "Tom Brady",
             "employeeId": "E1001",
-            "email": "Kai.Duty@ibm.com"
+            "email": "tom.brady@pnc.com"
         },
         "direct_reports": []
     }

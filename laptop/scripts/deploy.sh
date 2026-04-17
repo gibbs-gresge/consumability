@@ -1,12 +1,12 @@
 #!/bin/bash
 
-# Enterprise Device Replacement Multi-Agent System
+# Enterprise Catalog Ordering Multi-Agent System
 # Deployment Script
 
 set -e  # Exit on error
 
 echo "========================================="
-echo "Device Replacement System Deployment"
+echo "Catalog Ordering System Deployment"
 echo "========================================="
 echo ""
 
@@ -32,10 +32,10 @@ echo "Importing individual tool files..."
 
 tools=(
     "tools/employee_tools.py"
+    "tools/get_records.py"
     "tools/servicenow_tools.py"
     "tools/teams_tools.py"
     "tools/utility_tools.py"
-    "tools/mac_eligibility_tool.py"
 )
 
 for tool in "${tools[@]}"; do
@@ -60,19 +60,6 @@ for agent in "${agents[@]}"; do
     orchestrate agents import -f "$agent" || echo -e "${YELLOW}Warning: Failed to import $agent${NC}"
 done
 
-echo ""
-echo "========================================="
-echo "Step 4: Creating Knowledge Bases"
-echo "========================================="
-
-knowledge_bases=(
-    "knowledge_base/it_policies_kb.yaml"
-)
-
-for kb in "${knowledge_bases[@]}"; do
-    echo "Creating knowledge base: $kb..."
-    orchestrate knowledge-bases import -f "$kb" || echo -e "${YELLOW}Warning: Failed to import $kb${NC}"
-done
 
 
 echo ""

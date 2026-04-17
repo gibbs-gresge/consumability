@@ -13,12 +13,13 @@ class EmployeeStatus(str, Enum):
     TERMINATED = "terminated"
 
 
-class DeviceCategory(str, Enum):
-    """Device category enumeration."""
-    STANDARD = "Standard"
-    MAC = "Mac"
-    HIGH_SPEC = "High-Spec"
-    WORKSTATION = "Workstation"
+class CatalogItemCategory(str, Enum):
+    """Catalog item category enumeration."""
+    ACCESS = "Access"
+    SOFTWARE = "Software"
+    HARDWARE = "Hardware"
+    SERVICE = "Service"
+    TEMPLATE = "Template"
 
 
 class ApprovalStatus(str, Enum):
@@ -52,10 +53,9 @@ class TicketPriority(str, Enum):
 
 class RequestType(str, Enum):
     """Request type enumeration."""
-    NEW_EMPLOYEE = "new_employee"
-    REFRESH = "refresh"
+    CATALOG_ORDER = "catalog_order"
     MANAGER_REQUEST = "manager_request"
-    REPLACEMENT = "replacement"
+    SELF_SERVICE = "self_service"
 
 
 # Made with Bob

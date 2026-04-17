@@ -1,0 +1,7 @@
+# Requirements for Laptop Catalog Ordering Tools
+# ServiceNow integration and utility tools
+
+# HTTP requests for ServiceNow API
+requests
+
+# Made with Bob

@@ -9,10 +9,6 @@ llm_config:
   temperature: 0.1
 style: default
 
-context_access_enabled: true
-context_variables:
-  - wxo_email_id
-
 instructions: |
   You are a specialized agent for employee profile management.
   

@@ -1,5 +1,11 @@
 {
-  "result": [
-    {
-      
-    },{}]}
+   "result":[
+      {
+         "sys_id":"011f117a9f3002002920bde8132e7020",
+         "name":"Retire a Standard Change Template"
+      },
+      {
+         "sys_id":"01205b180a0a0b3000b6efd641d24b75",
+         "name":"Grant role delegation rights within a group"
+      },{}]}
+    

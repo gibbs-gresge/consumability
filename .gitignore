@@ -1,2 +1,5 @@
 *.DS_Store
 *.pyc
+curl.txt
+schema.txt
+requestCurl.txt

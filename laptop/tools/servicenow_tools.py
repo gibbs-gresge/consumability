@@ -1,93 +1,119 @@
 """
-ServiceNow integration tools for device catalog and ticket management.
-Provides functions for catalog queries, eligibility checks, and ticket operations.
+ServiceNow integration tools for catalog ordering and ticket management.
+Provides functions for creating catalog item requests.
 """
-import os
 import requests
-from typing import Optional, List, Dict, Any
-from datetime import datetime, timedelta
-from functools import wraps
-import time
+from typing import Dict, Any
 import logging
-from enum import Enum
 
 from ibm_watsonx_orchestrate.agent_builder.tools import tool
+from ibm_watsonx_orchestrate.agent_builder.connections import ConnectionType
+from ibm_watsonx_orchestrate.run import connections
 
 logger = logging.getLogger(__name__)
 
-@tool
-def check_refresh_eligibility(employee_id: str) -> Dict[str, Any]:
+# ServiceNow connection app ID
+SERVICENOW_APP_ID = 'test_token'
+
+
+@tool(
+    expected_credentials=[
+        {"app_id": SERVICENOW_APP_ID, "type": ConnectionType.BEARER_TOKEN}
+    ]
+)
+def create_a_request(
+    item_sys_id: str,
+    employee_id: str,
+    short_description: str
+) -> Dict[str, Any]:
     """
-    Check if employee is eligible for device refresh based on company policy.
+    Create a ServiceNow catalog item request.
     
-    This tool checks the employee's current device assignment and purchase date
-    to determine if they are eligible for a device refresh according to the
-    3-year refresh policy (1095 days).
+    This tool submits an order for a catalog item on behalf of an employee.
+    It creates a request in ServiceNow with the specified item and details.
     
-    Parameters:
-        employee_id (str): The employee's unique identifier (e.g., "EMP12345")
-        
+    Args:
+        item_sys_id (str): The sys_id of the catalog item to order
+        employee_id (str): The employee ID for whom the request is being made
+        short_description (str): A short description/comment about the request
+    
     Returns:
-        dict: Dictionary containing eligibility status with fields:
-            - is_eligible (bool): Whether employee is eligible for refresh
-            - purchase_date (str): Date device was purchased
-            - days_since_purchase (int): Days since device was purchased
-            - refresh_policy_days (int): Company policy refresh period (1095 days)
-            - reason (str): Explanation of eligibility status
-        
+        Dict[str, Any]: Dictionary containing:
+            - request_number: The ServiceNow request number (e.g., "REQ0010153")
+            - sys_id: The system ID of the created request
+            - status: Status of the request
+    
     Example:
-        eligibility = check_refresh_eligibility("EMP12345")
-        if eligibility['is_eligible']:
-            print(f"Eligible! Reason: {eligibility['reason']}")
+        >>> result = create_a_request(
+        ...     item_sys_id="011f117a9f3002002920bde8132e7020",
+        ...     employee_id="E1001",
+        ...     short_description="Need SharePoint access for new project"
+        ... )
+        >>> print(result['request_number'])
+        REQ0010153
     """
     try:
-        # Mock data for specific employee IDs from employee.json
-        refresh_policy_days = 1095  # 3 years = 1095 days
+        # Get credentials from watsonx Orchestrate connection
+        creds = connections.bearer_token(SERVICENOW_APP_ID)
+        base_url = creds.url
+        bearer_token = creds.token
         
-        # E1001 - Kai Duty: Eligible (device over 3 years old)
-        if employee_id == "E1001":
-            return {
-                "is_eligible": True,
-                "purchase_date": "2020-03-15",
-                "days_since_purchase": 2166,  # ~5.9 years
-                "refresh_policy_days": refresh_policy_days,
-                "reason": f"Device is 2166 days old, exceeding the {refresh_policy_days}-day refresh policy."
-            }
+        # Construct the API endpoint
+        endpoint = f"{base_url}/api/sn_sc/servicecatalog/items/{item_sys_id}/order_now"
         
-        # E1002 - Maya Chen: Eligible (device over 3 years old)
-        elif employee_id == "E1002":
-            return {
-                "is_eligible": True,
-                "purchase_date": "2020-08-10",
-                "days_since_purchase": 2018,  # ~5.5 years
-                "refresh_policy_days": refresh_policy_days,
-                "reason": f"Device is 2018 days old, exceeding the {refresh_policy_days}-day refresh policy."
+        # Build request body
+        request_body = {
+            "quantity": "1",
+            "variables": {
+                "requested_for": employee_id,
+                "short_description": short_description
             }
+        }
         
-        # E1003 - Liam Patel: Eligible (device over 3 years old)
-        elif employee_id == "E1003":
-            return {
-                "is_eligible": True,
-                "purchase_date": "2021-01-20",
-                "days_since_purchase": 1855,  # ~5.1 years
-                "refresh_policy_days": refresh_policy_days,
-                "reason": f"Device is 1855 days old, exceeding the {refresh_policy_days}-day refresh policy."
-            }
+        # Set headers
+        headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': f'Bearer {bearer_token}'
+        }
         
-        # E1004 - Noah Brooks: NOT eligible (device less than 3 years old)
-        elif employee_id == "E1004":
-            days_since_purchase = 890  # ~2.4 years
-            days_remaining = refresh_policy_days - days_since_purchase
-            return {
-                "is_eligible": False,
-                "purchase_date": "2023-08-15",
-                "days_since_purchase": days_since_purchase,
-                "refresh_policy_days": refresh_policy_days,
-                "reason": f"Device is {days_since_purchase} days old. {days_remaining} days remaining until eligible for refresh."
-            }
-
+        # Make the API request
+        logger.info(f"Creating ServiceNow request for item {item_sys_id}, employee {employee_id}")
+        response = requests.post(endpoint, headers=headers, json=request_body, timeout=30)
+        
+        # Check for successful response
+        if response.status_code not in [200, 201]:
+            error_msg = f"ServiceNow API returned status {response.status_code}"
+            logger.error(f"{error_msg}: {response.text}")
+            raise Exception(error_msg)
+        
+        # Parse response
+        data = response.json()
+        result = data.get('result', {})
+        
+        # Extract request details
+        request_number = result.get('request_number', 'Unknown')
+        sys_id = result.get('sys_id', 'Unknown')
+        status = result.get('request_state', 'Submitted')
+        
+        logger.info(f"Successfully created request {request_number}")
+        
+        return {
+            'request_number': request_number,
+            'sys_id': sys_id,
+            'status': status
+        }
+        
+    except requests.exceptions.Timeout:
+        logger.error("ServiceNow API request timed out")
+        raise Exception("Request to ServiceNow timed out. Please try again.")
+    
+    except requests.exceptions.RequestException as e:
+        logger.error(f"ServiceNow API request failed: {str(e)}")
+        raise Exception(f"Failed to connect to ServiceNow: {str(e)}")
+    
     except Exception as e:
-        logger.error(f"Error checking refresh eligibility for {employee_id}: {str(e)}")
-        raise
+        logger.error(f"Error creating ServiceNow request: {str(e)}")
+        raise Exception(f"Error creating request: {str(e)}")
 
 # Made with Bob
