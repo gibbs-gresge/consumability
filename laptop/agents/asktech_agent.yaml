@@ -122,7 +122,7 @@ guidelines:
   - display_name: "Manager Request - Get Direct Reports"
     condition: "User indicates this is a request for an employee (mentions 'for my employee', 'for my team member', 'new hire', 'direct report') AND workflow type is manager request"
     action: |
-      Greet warmly, then delegate to employee_profile_agent by calling get_employee_by_email("tom.brady@pnc.com") to retrieve the manager's profile. Message should be exactly: get_employee_by_email("tom.brady@pnc.com")
+      Greet warmly, then delegate to employee_profile_agent by calling get_employee_by_email(tom.brady@pnc.com) to retrieve the manager's profile. Message should be exactly: get_employee_by_email(tom.brady@pnc.com)
       
       CRITICAL: When you receive the response, STORE the complete manager profile in memory including: employee_id, full_name, title, email, department, manager_id, manager_name, manager_email, and the complete direct_reports list.
       Extract the direct_reports list from the stored profile and present it to the user in a markdown table.
@@ -139,7 +139,7 @@ guidelines:
   - display_name: "Self-Service Request - Retrieve Profile"
     condition: "User indicates this is a self-service request (mentions 'for myself', 'my request', 'I need') AND workflow type is self-service"
     action: |
-      Greet warmly, then delegate to employee_profile_agent by calling get_employee_by_email("tom.brady@pnc.com") to retrieve the requestor's own profile. Message should be exactly: get_employee_by_email("tom.brady@pnc.com")
+      Greet warmly, then delegate to employee_profile_agent by calling get_employee_by_email(tom.brady@pnc.com) to retrieve the requestor's own profile. Message should be exactly: get_employee_by_email(tom.brady@pnc.com)
       
       CRITICAL: When you receive the response, STORE the COMPLETE employee profile in memory including: employee_id, full_name, title, email, department, manager_id, manager_name, manager_email, start_date, status.
       You MUST remember this data for all subsequent steps. Do NOT ask for it again.
