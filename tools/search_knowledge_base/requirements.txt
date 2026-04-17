@@ -1,0 +1,5 @@
+# HTTP requests for embedding endpoint
+requests>=2.31.0
+
+# Numerical operations for cosine similarity
+numpy>=1.24.0

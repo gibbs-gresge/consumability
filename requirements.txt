@@ -1,0 +1,16 @@
+# watsonx Orchestrate Agent Development Kit
+ibm-watsonx-orchestrate>=1.15.0
+
+# Data processing for Excel files
+openpyxl>=3.1.0
+pandas>=2.0.0
+
+# Milvus dependencies (optional - only needed for external Milvus setup)
+# pymilvus>=2.3.0
+# sentence-transformers>=2.2.0
+
+# Environment variable management
+python-dotenv>=1.0.0
+
+# Data obfuscation
+faker>=24.0.0

@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Catalog - PNC Developer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+        }
+
+        /* Header Styles */
+        .header {
+            background-color: #3d4f5c;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .menu-icon {
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background-color: #ff6b35;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .logo-text {
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .sign-in {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            background-color: #2c3e4f;
+            padding: 15px 30px;
+            color: white;
+            font-size: 14px;
+        }
+
+        .breadcrumb a {
+            color: white;
+            text-decoration: none;
+            margin-right: 10px;
+        }
+
+        .breadcrumb span {
+            margin: 0 5px;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        .page-header {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .page-title {
+            font-size: 32px;
+            color: #333;
+            font-weight: 400;
+        }
+
+        .filter-icon {
+            color: #0066cc;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        /* Product Grid */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 20px;
+        }
+
+        .product-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .product-title {
+            color: #0066cc;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .product-description {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* Orchestrate Chat Container */
+        #root {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="menu-icon">☰</div>
+        <div class="logo">
+            <div class="logo-icon">▶</div>
+            <div class="logo-text">PNC</div>
+        </div>
+        <div class="sign-in">SIGN IN</div>
+    </div>
+
+    <!-- Breadcrumb -->
+    <div class="breadcrumb">
+        <a href="#">Home</a>
+        <span>›</span>
+        <span>Explore Our Products</span>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="page-header">
+            <h1 class="page-title">Product Catalog</h1>
+            <div class="filter-icon">☰</div>
+        </div>
+
+        <div class="product-grid">
+            <div class="product-card">
+                <div class="product-title">Account Transfer API</div>
+                <div class="product-description">
+                    Allows money transfers between your PNC accounts
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-title">Account Verification Services</div>
+                <div class="product-description">
+                    Confirm that an account is open, active and in good standing before making a payment.
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-title">Bank Routing Number Verification</div>
+                <div class="product-description">
+                    Validate a bank routing number, including payment types that are supported, including RTP.
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-title">Card Tokenization</div>
+                <div class="product-description">
+                    PNC Card Tokenization API may be used to encrypt & tokenize sensitive card data so that it may be stored in a secure manner. The card token generated from...
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-title">Check Deposit</div>
+                <div class="product-description">
+                    Send check images and data for checks to be deposited in your account.
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-title">Check Images</div>
+                <div class="product-description">
+                    View the images of the front and back of paid checks from your account
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-title">ePayments</div>
+                <div class="product-description">
+                    Initiate, check status, or cancel payments to consumers with our ePayments solution
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-title">FX API</div>
+                <div class="product-description">
+                    The FX API can be used to optionally view a live FX rate prior to submitting an FX payment
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-title">Information Reporting</div>
+                <div class="product-description">
+                    Retrieve deposit, loan and commercial card account information including, balance and transaction...
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-title">OAUTH</div>
+                <div class="product-description">
+                    The first access point for PNC APIs. It verifies your API permission and determines data access...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Orchestrate Chat Root Element -->
+    <div id="root"></div>
+
+    <!-- Orchestrate Snippet -->
+    <script>
+      // Add console logging for debugging
+      console.log('Initializing Watson Orchestrate...');
+      
+      window.wxOConfiguration = {
+        orchestrationID: "1d334f6f5c4a402389b1001f50d6565d_d6b856ef-7c9b-47ed-8157-7791161ae883",
+        hostURL: "https://us-south.watson-orchestrate.cloud.ibm.com",
+        rootElementID: "root",
+        deploymentPlatform: "ibmcloud",
+        crn: "crn:v1:bluemix:public:watsonx-orchestrate:us-south:a/1d334f6f5c4a402389b1001f50d6565d:d6b856ef-7c9b-47ed-8157-7791161ae883::",
+        chatOptions: {
+            agentId: "313ec871-fb82-4577-9374-49a045256bc9",
+            agentEnvironmentId: "3aa28aaa-6c92-4158-8e5f-97198ed11717",
+        },
+        // Layout configuration - expand the chat window
+        layout: {
+            form: 'float',                    // Floating window mode
+            width: '600px',                   // Expanded width (default is ~350px)
+            height: '650px',                  // Expanded height (default is ~500px)
+            showOrchestrateHeader: true       // Show the header bar
+        },
+        // Style configuration - custom color scheme
+        style: {
+            headerColor: '#F58025',                    // Blue header
+            userMessageBackgroundColor: '#0069AA',     // Orange user message bubbles
+            primaryColor: '#F58025',                   // Blue for interactive elements
+            showBackgroundGradient: true               // Keep gradient background
+        }
+      };
+      
+      console.log('Configuration:', window.wxOConfiguration);
+      
+      setTimeout(function () {
+        const script = document.createElement('script');
+        script.src = `${window.wxOConfiguration.hostURL}/wxochat/wxoLoader.js?embed=true`;
+        
+        script.addEventListener('load', function () {
+            console.log('wxoLoader.js loaded successfully');
+            try {
+                wxoLoader.init();
+                console.log('wxoLoader.init() called');
+            } catch (error) {
+                console.error('Error initializing wxoLoader:', error);
+            }
+        });
+        
+        script.addEventListener('error', function (error) {
+            console.error('Error loading wxoLoader.js:', error);
+        });
+        
+        document.head.appendChild(script);
+        console.log('Script tag added to head');
+      }, 0);
+    </script>
+</body>
+</html>
