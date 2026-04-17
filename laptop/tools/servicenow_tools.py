@@ -63,10 +63,11 @@ def create_a_request(
         
         # Build request body
         request_body = {
-            "quantity": "1",
             "variables": {
-                "requested_for": employee_id,
-                "short_description": short_description
+                "site_url": "https://example.sharepoint.com/sites/demo",
+                "old_title": "Old Site Title",
+                "new_title": "New Site Title",
+                "reason_for_title_change": short_description
             }
         }
         

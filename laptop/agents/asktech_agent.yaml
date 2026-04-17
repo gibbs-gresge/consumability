@@ -131,7 +131,9 @@ guidelines:
   - display_name: "Manager Request - Retrieve Employee Profile"
     condition: "Manager request workflow AND manager has selected an employee from their direct reports list"
     action: |
-      Delegate to employee_profile_agent by calling get_employee_by_id("[extracted employee_id]") for the selected direct report.
+      Delegate to employee_profile_agent with this EXACT message:
+      
+      "employee_id: [extracted employee_id]"
       
       CRITICAL: When you receive the response, STORE the COMPLETE employee profile in memory including: employee_id, full_name, title, email, department, manager_id, manager_name, manager_email, start_date, status.
       You MUST remember this data for all subsequent steps. Do NOT ask for it again.
@@ -154,21 +156,26 @@ guidelines:
       
       Delegate to servicenow_agent with this EXACT message: 'Execute get_records to retrieve catalog items. Search query: [extracted_search_query]'
       
-      CRITICAL: When you receive the item list response, STORE it as a structured object in memory:
-      - item_mapping: Dictionary mapping item numbers (1-15) to {sys_id, name}
-      - display_message: The markdown table to show the user
-      - item_count: Total number of items available
+      CRITICAL: servicenow_agent will return TWO things:
+      1. A formatted markdown table string (to display to user)
+      2. The raw item list data [{"name": "...", "sys_id": "..."}, ...]
       
-      Example structure to store:
+      STEP 1: When you receive the response, extract BOTH:
+      - The markdown table string (for display)
+      - The raw list data (for creating item_mapping)
+      
+      STEP 2: Create item_mapping from the raw list:
       {
-        "item_mapping": {
-          1: {"sys_id": "abc123", "name": "Item Name 1"},
-          2: {"sys_id": "def456", "name": "Item Name 2"},
-          ...
-        },
-        "display_message": "[markdown table text]",
-        "item_count": 15
+        1: {"sys_id": items[0]["sys_id"], "name": items[0]["name"]},
+        2: {"sys_id": items[1]["sys_id"], "name": items[1]["name"]},
+        ...
       }
+      
+      STEP 3: STORE in memory:
+      - item_mapping: The dictionary you just created
+      - item_count: Number of items
+      
+      STEP 4: Display the markdown table string to the user (it already includes the prompt for selection).
       
       MEMORY INTEGRITY RULES:
       - Once stored, this item_mapping MUST NOT be modified
@@ -176,9 +183,6 @@ guidelines:
       - When you look up item_mapping[5], you get the SAME sys_id every time
       - If you need to show the list again, use the SAME stored item_mapping
       - DO NOT create a new item_mapping unless explicitly re-querying the catalog
-      
-      Display the markdown table from display_message to the user.
-      Ask: "Please select an item by number and provide a short comment about your request."
   
   - display_name: "Capture Item Selection and Comment"
     condition: "User provides an item number and a comment"
