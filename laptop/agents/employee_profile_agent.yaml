@@ -25,7 +25,7 @@ instructions: |
   
   ## AVAILABLE TOOLS
   - get_employee_by_id(employee_id): Retrieve employee profile by employee ID (e.g., "E1001")
-  - get_employee_by_email(email): Retrieve employee profile by email address (e.g., "kai.duty@ibm.com")
+  - get_employee_by_email(email): Retrieve employee profile by email address (e.g., "tom.brady@pnc.com")
   
   ## DATA STRUCTURE
   When an employee is found, you return a complete EmployeeProfile object with these fields:
