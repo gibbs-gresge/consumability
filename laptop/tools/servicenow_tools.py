@@ -22,18 +22,15 @@ SERVICENOW_APP_ID = 'test_token'
     ]
 )
 def create_a_request(
-    item_sys_id: str,
     employee_id: str,
     short_description: str
 ) -> Dict[str, Any]:
     """
-    Create a ServiceNow catalog item request.
+    Create a ServiceNow catalog request.
     
-    This tool submits an order for a catalog item on behalf of an employee.
-    It creates a request in ServiceNow with the specified item and details.
+    This tool creates a request in ServiceNow on behalf of an employee.
     
     Args:
-        item_sys_id (str): The sys_id of the catalog item to order
         employee_id (str): The employee ID for whom the request is being made
         short_description (str): A short description/comment about the request
     
@@ -45,7 +42,6 @@ def create_a_request(
     
     Example:
         >>> result = create_a_request(
-        ...     item_sys_id="011f117a9f3002002920bde8132e7020",
         ...     employee_id="E1001",
         ...     short_description="Need SharePoint access for new project"
         ... )
@@ -59,16 +55,12 @@ def create_a_request(
         bearer_token = creds.token
         
         # Construct the API endpoint
-        endpoint = f"{base_url}/api/sn_sc/servicecatalog/items/{item_sys_id}/order_now"
+        endpoint = f"{base_url}/api/now/table/sc_request"
         
         # Build request body
         request_body = {
-            "variables": {
-                "site_url": "https://example.sharepoint.com/sites/demo",
-                "old_title": "Old Site Title",
-                "new_title": "New Site Title",
-                "reason_for_title_change": short_description
-            }
+            "short_description": short_description,
+            "requested_for": employee_id
         }
         
         # Set headers
@@ -79,7 +71,7 @@ def create_a_request(
         }
         
         # Make the API request
-        logger.info(f"Creating ServiceNow request for item {item_sys_id}, employee {employee_id}")
+        logger.info(f"Creating ServiceNow request for employee {employee_id}")
         response = requests.post(endpoint, headers=headers, json=request_body, timeout=30)
         
         # Check for successful response
