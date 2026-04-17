@@ -1,6 +1,7 @@
 # Requirements for Laptop Catalog Ordering Tools
 # ServiceNow integration and utility tools
-
+--trusted-host pypi-local-repo.ibm-instance.svc.cluster.local:8080
+--extra-index-url http://pypi-local-repo.ibm-instance.svc.cluster.local:8080/simple/
 # HTTP requests for ServiceNow API
 requests
 
