@@ -32,15 +32,23 @@ echo "Importing individual tool files..."
 
 tools=(
     "tools/employee_tools.py"
-    "tools/get_records.py"
-    "tools/servicenow_tools.py"
     "tools/teams_tools.py"
     "tools/utility_tools.py"
 )
 
 for tool in "${tools[@]}"; do
     echo "Importing $tool..."
-    orchestrate tools import -k python -f "$tool" -r tools/requirements.txt -p tools/ -a tests_token || echo -e "${YELLOW}Warning: Failed to import $tool${NC}"
+    orchestrate tools import -k python -f "$tool" -r tools/requirements.txt -p tools/ || echo -e "${YELLOW}Warning: Failed to import $tool${NC}"
+done
+
+tools=(
+    "tools/get_records.py"
+    "tools/servicenow_tools.py"
+)
+
+for tool in "${tools[@]}"; do
+    echo "Importing $tool..."
+    orchestrate tools import -k python -f "$tool" -r tools/requirements.txt -p tools/ -a test_token || echo -e "${YELLOW}Warning: Failed to import $tool${NC}"
 done
 
 echo ""
