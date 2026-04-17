@@ -33,7 +33,6 @@ echo "Importing individual tool files..."
 tools=(
     "tools/employee_tools.py"
     "tools/teams_tools.py"
-    "tools/utility_tools.py"
 )
 
 for tool in "${tools[@]}"; do
